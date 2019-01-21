@@ -1,0 +1,8 @@
+{
+  "name": "ytext",
+  "nameText": "文本",
+  "path": "@/components/text/index.vue",
+  "props": {
+    "text": "我是文本"
+  }
+}
