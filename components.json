@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "data": [
+    {
+      "name": "ybutton",
+      "nameText": "按钮",
+      "path": "@/components/button/index.vue"
+    },
+    {
+      "name": "ytext",
+      "nameText": "文本",
+      "path": "@/components/text/index.vue"
+    }
+  ]
+}
