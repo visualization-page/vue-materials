@@ -1,6 +1,6 @@
 module.exports = {
   type: 'object',
-  title: '按钮',
+  title: '按钮表单',
   properties: {
     text: {
       title: '文本',
