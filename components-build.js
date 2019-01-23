@@ -35,9 +35,11 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
         const final = content.replace(/\/\/ global-component-start\n[\s\S]+\/\/ global-component-end/, () => {
           if (err) throw err
           const tmp = ['// global-component-start']
+          tmp.push('Vue.prototype.$all = {')
           json.data.forEach(item => {
-            tmp.push(`Vue.component('${item.name}-${item.id}', () => import('${item.path}'))`)
+            tmp.push(`  '${item.name}': () => import('${item.path}'),`)
           })
+          tmp.push('}')
           tmp.push('// global-component-end')
           return tmp.join('\n')
         })
@@ -45,10 +47,10 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
           if (err) throw err
           console.log('注册全局组件，改写app.js成功')
           console.log('打包更新模版')
-          exec(`cd ../vue-ssr-template && npm run build && git add . && git commit -m 'update materials' && git push`, err => {
-            if (err) throw err
-            console.log(`更新模版成功`)
-          })
+          // exec(`cd ../vue-ssr-template && npm run build && git add . && git commit -m 'update materials' && git push`, err => {
+          //   if (err) throw err
+          //   console.log(`更新模版成功`)
+          // })
         })
       })
     })
