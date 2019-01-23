@@ -1,8 +1,8 @@
 const fs = require('fs')
 const path = require('path')
 const comPath = path.resolve(__dirname, './src/components')
-const targetComPath = path.resolve(__dirname, '../vue-ssr-template/src')
-// const targetPath = path.resolve(__dirname, 'components.json')
+const templatePath = path.resolve(__dirname, '../vue-ssr-template')
+const targetComPath = path.resolve(templatePath, 'src')
 const { exec } = require('child_process')
 
 // 将物料拷贝到模版文件中
@@ -28,6 +28,29 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
     fs.writeFile(path.resolve(targetComPath, 'components/config.json'), JSON.stringify(json, null, 2), { encoding: 'utf8' }, (err, data) => {
       if (err) throw err
       console.log(`写入成功`)
+
+      // 全局注册异步组件更新引用
+      const appJsPath = path.resolve(templatePath, 'app.js')
+      fs.readFile(appJsPath, 'utf-8', (err, content) => {
+        const final = content.replace(/\/\/ global-component-start\n[\s\S]+\/\/ global-component-end/, () => {
+          if (err) throw err
+          const tmp = ['// global-component-start']
+          json.data.forEach(item => {
+            tmp.push(`Vue.component('${item.name}-${item.id}', () => import('${item.path}'))`)
+          })
+          tmp.push('// global-component-end')
+          return tmp.join('\n')
+        })
+        fs.writeFile(appJsPath, final, 'utf8', err => {
+          if (err) throw err
+          console.log('注册全局组件，改写app.js成功')
+          console.log('打包更新模版')
+          exec(`cd ../vue-ssr-template && npm run build && git add . && git commit -m 'update materials' && git push`, err => {
+            if (err) throw err
+            console.log(`更新模版成功`)
+          })
+        })
+      })
     })
   })
 })
