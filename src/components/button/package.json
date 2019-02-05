@@ -3,11 +3,6 @@
   "nameText": "按钮",
   "path": "@/components/button/index.vue",
   "props": {
-    "text": "我是按钮",
-    "backgroundColor": "red",
-    "fontColor": "white",
-    "width": 100,
-    "height": 40,
-    "radius": 4
+    "text": "默认按钮"
   }
 }

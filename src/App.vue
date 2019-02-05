@@ -1,25 +1,49 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div class="app-left">
+      <div
+        v-for="item in list"
+        :key="item.name"
+        class="app-left__item"
+        @click="$router.push(item.path)"
+      >
+        {{ item.name }}
+      </div>
     </div>
-    <router-view/>
+    <div class="app-right">
+      <router-view/>
+    </div>
   </div>
 </template>
-<style lang="stylus">
-#app
-  font-family 'Avenir', Helvetica, Arial, sans-serif
-  -webkit-font-smoothing antialiased
-  -moz-osx-font-smoothing grayscale
-  text-align center
-  color #2c3e50
 
-#nav
-  padding 30px
-  a
-    font-weight bold
-    color #2c3e50
-    &.router-link-exact-active
-      color #42b983
+<script>
+import nav from './views/component-page/nav'
+
+export default {
+  data () {
+    return {
+      list: nav
+    }
+  }
+}
+</script>
+
+<style lang="stylus">
+html, body, #app
+  height 100%
+body
+  margin: 0
+  padding 0
+.app-left
+  float: left
+  width 200px
+  height inherit
+  border-right 1px #eee solid
+  &__item
+    padding-left 15px
+    line-height 40px
+    border-bottom 1px #eee solid
+    cursor pointer
+.app-right
+  margin-left 200px
 </style>

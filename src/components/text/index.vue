@@ -1,13 +1,13 @@
 <template>
-  <p>{{ config.text }}</p>
+  <p>{{ text }}</p>
 </template>
 
 <script>
-export default {
-  name: 'ytext',
+  export default {
+    name: 'ytext',
 
-  props: {
-    config: Object
+    props: {
+      text: String
+    }
   }
-}
 </script>
