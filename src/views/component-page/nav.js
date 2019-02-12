@@ -1,5 +1,5 @@
 import ybutton from './button'
-import ytext from '@/components/text/index'
+import ytext from './text.vue'
 
 export default [
   {

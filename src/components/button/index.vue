@@ -2,11 +2,11 @@
   <div
     class="ybutton"
     :class="{
-      'ybutton-type__inline': subType === 1,
-      'ybutton-type__block': subType === 2,
-      'ybutton-type__fixed': subType === 3,
-      'ybutton-type__fixed--bottom': fixedPosition === 'bottom',
-      'ybutton-type__fixed--top': fixedPosition === 'top'
+      'ybutton-type__inline': category === 1,
+      'ybutton-type__block': category === 2,
+      'ybutton-type__fixed': category === 3,
+      'ybutton-type__fixed--bottom': category === 3 && fixedPosition === 'bottom',
+      'ybutton-type__fixed--top': category === 3 && fixedPosition === 'top'
     }"
     @click="$emit('on-click')"
   >
@@ -19,8 +19,9 @@
       }"
       :style="{
         backgroundColor,
-        color: yColor,
-        borderColor: yBorderColor
+        color,
+        borderColor: yBorderColor,
+        backgroundImage: backgroundImage && `url(${backgroundImage})`
       }"
     >
       <span>{{ text }}</span>
@@ -33,7 +34,7 @@
     name: 'ybutton',
 
     props: {
-      subType: {
+      category: {
         type: Number,
         default: 1  // 1 inline-block按钮，2 block按钮，3 固定按钮
       },
@@ -48,18 +49,19 @@
       fixedPosition: {
         type: String,
         default: 'bottom'
-      }
+      },
+      backgroundImage: String
     },
 
     computed: {
-      isTsBg () {
-        return /ffffff|white|255, ?255, ?255/.test(this.backgroundColor) || !this.backgroundColor
-      },
-      yColor () {
-        return this.isTsBg ? null : '#ffffff'
-      },
+      // isTsBg () {
+      //   return (/ffffff|white|255, ?255, ?255/.test(this.backgroundColor) || !this.backgroundColor) && !this.backgroundImage
+      // },
+      // yColor () {
+      //   return this.isTsBg ? null : this.color || '#ffffff'
+      // },
       yBorderColor () {
-       return this.isTsBg ? '#eeeeee' : this.borderColor || this.backgroundColor
+       return this.borderColor || this.backgroundColor || '#eeeeee'
       }
     }
   }
@@ -75,6 +77,8 @@
       transition background-color .3s
       border-width 1px
       border-style solid
+      background-repeat no-repeat
+      background-size 100% 100%
       &:hover
         background-color rgba(0, 0, 0, .1)
     &-type
@@ -89,6 +93,7 @@
         left 0
         &--bottom
           bottom 0
+          box-shadow 0 -2px 6px rgba(0, 0, 0, .3)
         &--top
           top 0
         &>div
