@@ -4,6 +4,9 @@
   "path": "@/components/button/index.vue",
   "props": {
     "category": 1,
-    "text": "默认按钮"
+    "text": "默认按钮",
+    "backgroundColor": "#fff",
+    "color": "#666",
+    "click": "link_"
   }
 }

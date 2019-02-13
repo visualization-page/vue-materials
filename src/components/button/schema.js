@@ -20,11 +20,12 @@ module.exports = {
       cover: '',
       type: 'object',
       properties: {
-        borderImage: {
+        backgroundImage: {
           title: '背景图片',
           description: '',
           type: 'string',
-          format: 'image'
+          format: 'image',
+          default: ''
         }
       }
     },
@@ -74,10 +75,22 @@ module.exports = {
       title: '文本',
       type: 'string'
     },
-    src: {
-      title: '链接',
+    click: {
+      title: '点击事件',
       type: 'string',
-      format: 'link'
+      format: 'select',
+      default: 'tel_tel://123',
+      options: [
+        {
+          label: '跳转到',
+          value: 'link'
+        },
+        {
+          label: '拨打电话',
+          value: 'tel'
+        }
+      ],
+      isLink: true
     },
     backgroundColor: {
       title: '背景色',
@@ -89,7 +102,8 @@ module.exports = {
       title: '字体颜色',
       description: '',
       type: 'string',
-      format: 'color'
+      format: 'color',
+      default: '#666'
     }
   }
 }
