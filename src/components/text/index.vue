@@ -53,13 +53,13 @@
     props: {
       subType: {
         type: Number,
-        default: 1  // 1 图片+段落+图片，2 标题
+        default: 1  // 1 图片+段落，2 标题
       },
       text: {
         type: String,
         default: ''
       },
-      isTextIndent: Boolean,
+      // isTextIndent: Boolean,
       textAlign: {
         type: String,
         default: 'left'
@@ -72,7 +72,7 @@
         type: Number,
         default: 14
       },
-      isBold: Boolean,
+      isBold: [Boolean, Number],
       preImg: String,
       preWidth: Number,
       preHeight: Number,
