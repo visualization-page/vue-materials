@@ -16,12 +16,14 @@ module.exports = {
         preWidth: {
           title: '图片宽度',
           description: '',
-          type: 'string'
+          type: 'number',
+          format: 'inputNumber'
         },
         preHeight: {
           title: '图片高度',
           description: '',
-          type: 'string'
+          type: 'number',
+          format: 'inputNumber'
         },
         subType: {
           format: 'hidden',
@@ -52,6 +54,7 @@ module.exports = {
     text: {
       title: '文本',
       type: 'string',
+      format: 'textarea',
       default: '我是按钮'
     },
     fontColor: {
