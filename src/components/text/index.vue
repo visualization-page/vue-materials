@@ -12,6 +12,9 @@
         :class="{
           'ytext__bold': isBold
         }"
+        :style="{
+          fontSize: `${fontSize}px`
+        }"
       >
         {{ text }}
       </div>
@@ -84,7 +87,10 @@
 
     computed: {
       escapeText () {
-        return this.text.replace(/<([a-z\/]+)/g, '&lt;$1').replace(/([a-z]+)>/g, '$1&gt;')
+        return this.text
+          .replace(/<([a-z\/]+)/g, '&lt;$1')
+          .replace(/([a-z]+)>/g, '$1&gt;')
+          .replace(/\n/g, '<br>')
       }
     }
   }
