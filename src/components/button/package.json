@@ -7,6 +7,8 @@
     "text": "默认按钮",
     "backgroundColor": "#fff",
     "color": "#666",
-    "click": "link_"
+    "click": "link_",
+    "marginTb": 0,
+    "marginLr": 10
   }
 }

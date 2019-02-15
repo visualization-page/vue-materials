@@ -151,7 +151,7 @@ module.exports = {
       default: 'tel_tel://123',
       options: [
         {
-          label: '跳转到',
+          label: '跳转到外部',
           value: 'link'
         },
         {

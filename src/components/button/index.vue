@@ -11,7 +11,7 @@
     :style="{
       margin: (subType === 1 || subType === 2) && `${marginTb || 0}px ${marginLr || 10}px`
     }"
-    @click="$emit('on-click')"
+    @click="handleClick"
   >
     <div
       class="ybutton__wrapper"
@@ -55,7 +55,8 @@
         type: String,
         default: 'bottom'
       },
-      backgroundImage: String
+      backgroundImage: String,
+      click: String
     },
 
     computed: {
@@ -67,6 +68,23 @@
       // },
       yBorderColor () {
        return this.borderColor || this.backgroundColor || '#eeeeee'
+      }
+    },
+
+    methods: {
+      handleClick () {
+        const click = this.click.split('_')
+        // type: link; tel
+        const isTel = click[0] === 'tel'
+        let val = click[1]
+        if (click.length > 2) {
+          val = click.slice(1, click.length).join('_')
+        }
+        if (isTel) {
+          location.href = val
+        } else {
+          window.open(val)
+        }
       }
     }
   }

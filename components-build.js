@@ -11,10 +11,12 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
   console.log('拷贝物料到ssr-template完成')
 
   // 生成json文件到components目录下
+  const targetJson = path.resolve(targetComPath, 'components/config.json')
   const json = {
-    version: 1,
+    version: require(targetJson).version + 1,
     data: []
   }
+  console.log(`新的组件配置版本号为：${json.version}`)
   fs.readdir(comPath, (err, dir) => {
     if (err) throw err
 
@@ -25,7 +27,7 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
       json.data.push(data)
     })
 
-    fs.writeFile(path.resolve(targetComPath, 'components/config.json'), JSON.stringify(json, null, 2), { encoding: 'utf8' }, (err, data) => {
+    fs.writeFile(targetJson, JSON.stringify(json, null, 2), { encoding: 'utf8' }, (err, data) => {
       if (err) throw err
       console.log(`写入成功`)
 
@@ -47,10 +49,10 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
           if (err) throw err
           console.log('注册全局组件，改写app.js成功')
           console.log('打包更新模版')
-          // exec(`cd ../vue-ssr-template && npm run build && git add . && git commit -m 'update materials' && git push`, err => {
-          //   if (err) throw err
-          //   console.log(`更新模版成功`)
-          // })
+          exec(`cd ../vue-ssr-template && npm run build && git add . && git commit -m 'update materials' && git push`, err => {
+            if (err) throw err
+            console.log(`更新模版成功`)
+          })
         })
       })
     })
