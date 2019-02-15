@@ -27,35 +27,46 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
       json.data.push(data)
     })
 
-    fs.writeFile(targetJson, JSON.stringify(json, null, 2), { encoding: 'utf8' }, (err, data) => {
-      if (err) throw err
-      console.log(`写入成功`)
+    fs.writeFile(
+      targetJson,
+      JSON.stringify(json) /* JSON.stringify(json, null, 2) */,
+      { encoding: 'utf8' },
+      (err, data) => {
+        if (err) throw err
+        console.log(`写入成功`)
 
-      // 全局注册异步组件更新引用
-      const appJsPath = path.resolve(templatePath, 'app.js')
-      fs.readFile(appJsPath, 'utf-8', (err, content) => {
-        const final = content.replace(/\/\/ global-component-start\n[\s\S]+\/\/ global-component-end/, () => {
-          if (err) throw err
-          const tmp = ['// global-component-start']
-          tmp.push('Vue.prototype.$all = {')
-          json.data.forEach(item => {
-            tmp.push(`  '${item.name}': () => import('${item.path}'),`)
-          })
-          tmp.push('}')
-          tmp.push('// global-component-end')
-          return tmp.join('\n')
-        })
-        fs.writeFile(appJsPath, final, 'utf8', err => {
-          if (err) throw err
-          console.log('注册全局组件，改写app.js成功')
-          console.log('打包更新模版')
-          exec(`cd ../vue-ssr-template && npm run build && git add . && git commit -m 'update materials' && git push`, err => {
+        // 全局注册异步组件更新引用
+        const appJsPath = path.resolve(templatePath, 'app.js')
+        fs.readFile(appJsPath, 'utf-8', (err, content) => {
+          const final = content.replace(/\/\/ global-component-start\n[\s\S]+\/\/ global-component-end/, () => {
             if (err) throw err
-            console.log(`更新模版成功`)
+            const tmp = ['// global-component-start']
+            tmp.push('Vue.prototype.$all = {')
+            json.data.forEach(item => {
+              tmp.push(`  '${item.name}': () => import('${item.path}'),`)
+            })
+            tmp.push('}')
+            tmp.push('// global-component-end')
+            return tmp.join('\n')
+          })
+          fs.writeFile(appJsPath, final, 'utf8', err => {
+            if (err) throw err
+            console.log('注册全局组件，改写app.js成功')
+            console.log('打包更新模版')
+            exec([
+              'cd ../vue-ssr-template',
+              'npm run build',
+              'git add .',
+              'git commit -m \'update materials and patch version\'',
+              'npm version patch',
+              'git push'
+            ].join(' && '), err => {
+              if (err) throw err
+              console.log(`更新模版成功`)
+            })
           })
         })
       })
-    })
   })
 })
 
