@@ -81,9 +81,11 @@
           val = click.slice(1, click.length).join('_')
         }
         if (isTel) {
-          location.href = val
-        } else {
+          location.href = `tel://${val}`
+        } else if (/^http/.test(val)) {
           window.open(val)
+        } else {
+          alert('链接应该以http或者https开头')
         }
       }
     }
