@@ -2,11 +2,14 @@
   <div
     class="ybutton"
     :class="{
-      'ybutton-type__inline': category === 1,
-      'ybutton-type__block': category === 2,
-      'ybutton-type__fixed': category === 3,
-      'ybutton-type__fixed--bottom': category === 3 && fixedPosition === 'bottom',
-      'ybutton-type__fixed--top': category === 3 && fixedPosition === 'top'
+      'ybutton-type__inline': subType === 1,
+      'ybutton-type__block': subType === 2,
+      'ybutton-type__fixed': subType === 3,
+      'ybutton-type__fixed--bottom': subType === 3 && fixedPosition === 'bottom',
+      'ybutton-type__fixed--top': subType === 3 && fixedPosition === 'top'
+    }"
+    :style="{
+      margin: (subType === 1 || subType === 2) && `${marginTb || 0}px ${marginLr || 10}px`
     }"
     @click="$emit('on-click')"
   >
@@ -34,10 +37,12 @@
     name: 'ybutton',
 
     props: {
-      category: {
+      subType: {
         type: Number,
         default: 1  // 1 inline-block按钮，2 block按钮，3 固定按钮
       },
+      marginTb: Number,
+      marginLr: Number,
       size: {
         type: String,
         default: 'middle' // large middle small

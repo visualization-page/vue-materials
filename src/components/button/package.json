@@ -3,7 +3,7 @@
   "nameText": "按钮",
   "path": "@/components/button/index.vue",
   "props": {
-    "category": 1,
+    "subType": 1,
     "text": "默认按钮",
     "backgroundColor": "#fff",
     "color": "#666",

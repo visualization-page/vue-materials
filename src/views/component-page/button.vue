@@ -3,7 +3,7 @@
     <btn text="默认按钮"/>
     <btn
       text="block 按钮"
-      :category="2"
+      :sub-type="2"
       background-color="blue"
     />
     <btn
@@ -11,6 +11,7 @@
       size="large"
       background-image="http://g.hiphotos.baidu.com/image/h%3D300/sign=ecd44d0923738bd4db21b431918a876c/f7246b600c338744dd981da85c0fd9f9d62aa080.jpg"
       color="#fff"
+      :margin-tb="10"
     />
     <br>
     <btn
@@ -21,7 +22,7 @@
     />
     <btn
       text="悬浮按钮"
-      :category="3"
+      :sub-type="3"
       background-color="blue"
     />
   </div>
@@ -45,5 +46,5 @@ export default {
 
 <style lang="stylus">
   .ybutton
-    margin-top 10px
+    // margin-top 10px
 </style>
