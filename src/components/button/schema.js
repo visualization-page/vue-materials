@@ -155,6 +155,10 @@ module.exports = {
           value: 'link'
         },
         {
+          label: '跳转到内部页面',
+          value: 'inner'
+        },
+        {
           label: '拨打电话',
           value: 'tel'
         }

@@ -4,6 +4,17 @@ const comPath = path.resolve(__dirname, './src/components')
 const templatePath = path.resolve(__dirname, '../vue-ssr-template')
 const targetComPath = path.resolve(templatePath, 'src')
 const { exec } = require('child_process')
+var redis = require('redis')
+const client = redis.createClient({ password: '123456' })
+const { promisify } = require('util')
+const setAsync = promisify(client.set).bind(client)
+const redisKey = 'remote_version'
+
+const cmd = process.argv.slice(2)
+const isCmdComponent = cmd.some(x => x === 'component')
+const isCmdTemplate = cmd.some(x => x === 'template')
+const isCmdAll = isCmdComponent && isCmdTemplate
+console.log(isCmdAll, isCmdComponent, isCmdTemplate)
 
 // 将物料拷贝到模版文件中
 exec(`cp -rf ${comPath} ${targetComPath}`, err => {
@@ -31,9 +42,18 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
       targetJson,
       JSON.stringify(json) /* JSON.stringify(json, null, 2) */,
       { encoding: 'utf8' },
-      (err, data) => {
+      async (err, data) => {
         if (err) throw err
         console.log(`写入成功`)
+        const remoteVersion = {
+          component: json.version,
+          template: undefined
+        }
+
+        if (isCmdAll || isCmdComponent) {
+          await setAsync(redisKey, JSON.stringify(remoteVersion))
+          console.log('更新组件版本信息到redis')
+        }
 
         // 全局注册异步组件更新引用
         const appJsPath = path.resolve(templatePath, 'app.js')
@@ -52,7 +72,7 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
           fs.writeFile(appJsPath, final, 'utf8', err => {
             if (err) throw err
             console.log('注册全局组件，改写app.js成功')
-            console.log('打包更新模版')
+            console.log('打包更新模版...')
             exec([
               'cd ../vue-ssr-template',
               'npm run build',
@@ -60,9 +80,20 @@ exec(`cp -rf ${comPath} ${targetComPath}`, err => {
               'git commit -m \'update materials and patch version\'',
               'npm version patch',
               'git push'
-            ].join(' && '), err => {
+            ].join(' && '), async err => {
               if (err) throw err
+
+              if (isCmdAll || isCmdTemplate) {
+                remoteVersion.template = require('../vue-ssr-template/package.json').version
+                await setAsync(redisKey, JSON.stringify(remoteVersion))
+                console.log('更新模版版本信息到redis')
+                // exec(['cd ../vue-ssr-template', 'node build/redis.js'].join(' && '), err => {
+                //   if (err) throw err
+                // })
+              }
+
               console.log(`更新模版成功`)
+              process.exit(0)
             })
           })
         })
