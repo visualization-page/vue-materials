@@ -148,7 +148,7 @@ module.exports = {
       title: '点击事件',
       type: 'string',
       format: 'select',
-      default: 'tel_tel://123',
+      default: 'tel_tel://1234',
       options: [
         {
           label: '跳转到外部',

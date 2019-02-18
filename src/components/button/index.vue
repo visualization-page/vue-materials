@@ -76,11 +76,14 @@
         const click = this.click.split('_')
         // type: link; tel
         const isTel = click[0] === 'tel'
+        const isInnerPage = click[0] === 'inner'
         let val = click[1]
         if (click.length > 2) {
           val = click.slice(1, click.length).join('_')
         }
-        if (isTel) {
+        if (isInnerPage) {
+          this.$router.push(val)
+        } else if (isTel) {
           location.href = `tel://${val}`
         } else if (/^http/.test(val)) {
           window.open(val)
